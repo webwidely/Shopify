@@ -1,0 +1,217 @@
+{% schema %}
+{
+  "name": "Hero 2 Column",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "column1",
+      "name": "Column 1",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "column1_bg_image",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "column1_heading",
+          "label": "Column Heading"
+        },
+        {
+          "type": "url",
+          "id": "column1_link",
+          "label": "Column Link"
+        },
+        {
+          "type": "link_list",
+          "id": "menu_1",
+          "label": "Select Menu"
+        }
+      ]
+    },
+    {
+      "type": "column2",
+      "name": "Column 2",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "column2_bg_image",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "column2_heading",
+          "label": "Column Heading"
+        },
+        {
+          "type": "url",
+          "id": "column2_link",
+          "label": "Column Link"
+        },
+        {
+          "type": "link_list",
+          "id": "menu_2",
+          "label": "Select Menu"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero 2 Column",
+      "category": "Hero"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="section-wrapper">
+  {% for block in section.blocks %}
+    {% if block.type == "column1" %}
+    <!-- Column 1 -->
+    <div class="column" style="background-image: url('{{ block.settings.column1_bg_image | img_url: 'master' }}');">
+      <a href="{{ block.settings.column1_link }}">
+        <div class="overlay"></div>
+        <div class="column-content">
+          <h1 class="column-heading">{{ block.settings.column1_heading }}</h1>
+        </div>
+      </a>
+      <!-- Menu appears below heading -->
+      <ul class="nav-menu">
+        {% for link in linklists[block.settings.menu_1].links %}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    {% if block.type == "column2" %}
+    <!-- Column 2 -->
+    <div class="column" style="background-image: url('{{ block.settings.column2_bg_image | img_url: 'master' }}');">
+      <a href="{{ block.settings.column2_link }}">
+        <div class="overlay"></div>
+        <div class="column-content">
+          <h1 class="column-heading">{{ block.settings.column2_heading }}</h1>
+        </div>
+      </a>
+      <!-- Menu appears below heading -->
+      <ul class="nav-menu">
+        {% for link in linklists[block.settings.menu_2].links %}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<style>
+  /* Section Wrapper */
+  .section-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    min-height: 80vh;
+  }
+
+  /* Columns */
+  .column {
+    position: relative;
+    width: 50%;
+    min-height: 400px;
+    background-size: cover;
+    background-position: center right;
+    overflow: hidden;
+    transition: all 0.5s ease;
+  }
+
+  
+
+  .column:hover .overlay {
+    background: rgba(0,0,0,.1); 
+     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none; /* Allow click events to pass through */
+    transition: background 0.5s ease 0s; /* Smooth transition with delay */
+    display: block;
+  }
+
+  /* Column Content */
+  .column-content {
+    position: absolute;
+    bottom: 80px; /* Push content higher to make space for the menu */
+    left: 20px;
+    color: white;
+    z-index: 2; /* Make sure content appears above overlay */
+  }
+
+  .column-heading {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    color: white;
+  }
+
+  /* Navigation Menu */
+  .nav-menu {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    padding: 0;
+    z-index: 2; /* Ensure it is above overlay */
+  }
+
+  .nav-menu li {
+    margin-bottom: 0;
+  }
+
+  .nav-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+  }
+
+  .column:hover .nav-menu {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Hover Effect for Links */
+  .nav-menu a:hover {
+    color: lightgray;
+        text-decoration: underline;
+
+  }
+
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .column {
+      width: 100%;
+    }
+
+    .column-content {
+      bottom: 60px;
+    }
+
+    .column-heading {
+      font-size: 2rem;
+    }
+
+    .nav-menu {
+      display:none;
+    }
+  }
+</style>
+
